@@ -21,11 +21,10 @@ const AuthProviders = () => {
     const fetchProviders = async () => {
       const res = await getProviders();
 
-      console.log(res)
-      
+      console.log(res);
+
       setProviders(res);
     };
-
 
     fetchProviders();
   }, []);
@@ -34,11 +33,14 @@ const AuthProviders = () => {
     return (
       <div>
         {Object.values(providers).map((provider) => (
-          <button key={provider.id}>{provider.id}</button>
+          <button key={provider.id} onClick={() => signIn(provider?.id)}>
+            {provider.id}
+          </button>
         ))}
       </div>
     );
   }
+
   return <div>AuthProviders</div>;
 };
 
