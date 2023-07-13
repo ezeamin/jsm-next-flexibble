@@ -1,6 +1,7 @@
+import { ProjectInterface } from '@/common';
 import { fetchAllProjects } from '@/lib/actions';
 
-import { ProjectInterface } from '@/common';
+import Categories from '@/components/Categories';
 import ProjectCard from '@/components/ProjectCard';
 
 interface ProjectsSearch {
@@ -17,15 +18,27 @@ interface ProjectsSearch {
   };
 }
 
-const Home = async () => {
-  const data = (await fetchAllProjects()) as ProjectsSearch;
+interface SearchParams {
+  category?: string;
+}
+
+interface HomeProps {
+  searchParams: SearchParams;
+}
+
+const Home = async (props: HomeProps) => {
+  const {
+    searchParams: { category },
+  } = props;
+
+  const data = (await fetchAllProjects(category)) as ProjectsSearch;
 
   const projectsToDisplay = data?.projectSearch?.edges || [];
 
   if (!projectsToDisplay.length) {
     return (
       <section className="flexStart flex-col paddings">
-        <h1>Categories</h1>
+        <Categories />
 
         <p className="no-result-text text-center">
           There are no projects to display
@@ -36,7 +49,7 @@ const Home = async () => {
 
   return (
     <section className="flex-start flex-col paddings mb-16">
-      <h1>Categories</h1>
+      <Categories />
       <section className="projects-grid">
         {projectsToDisplay.map(({ node }) => (
           <ProjectCard
