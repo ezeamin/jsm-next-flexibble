@@ -1,6 +1,12 @@
 'use client';
 
-import { getProviders, signIn } from 'next-auth/react';
+import { BuiltInProviderType } from 'next-auth/providers';
+import {
+  ClientSafeProvider,
+  getProviders,
+  LiteralUnion,
+  signIn,
+} from 'next-auth/react';
 import { useEffect, useState } from 'react';
 
 import Button from './Button';
@@ -14,7 +20,10 @@ interface Provider {
   signInUrlParams: Record<string, string> | null;
 }
 
-type Providers = Record<string, Provider>;
+type Providers = Record<
+  LiteralUnion<BuiltInProviderType, string>,
+  ClientSafeProvider
+>;
 
 const AuthProviders = () => {
   const [providers, setProviders] = useState<Providers | null>(null);
