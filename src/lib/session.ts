@@ -6,7 +6,7 @@ import GoogleProvider from 'next-auth/providers/google';
 
 import jsonwebtoken from 'jsonwebtoken';
 
-import { SessionInterface, UserProfile } from '../../common';
+import { SessionInterface, UserProfile } from '@/common';
 import { createUser, getUser } from './actions';
 
 export const authOptions: NextAuthOptions = {

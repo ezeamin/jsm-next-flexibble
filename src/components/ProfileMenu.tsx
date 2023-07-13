@@ -7,7 +7,7 @@ import { Fragment, useState } from 'react';
 
 import { Menu, Transition } from '@headlessui/react';
 
-import { SessionInterface } from '../../common';
+import { SessionInterface } from '@/common';
 
 const ProfileMenu = ({ session }: { session: SessionInterface }) => {
   const [openModal, setOpenModal] = useState(false);

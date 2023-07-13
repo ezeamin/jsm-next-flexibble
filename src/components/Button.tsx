@@ -4,7 +4,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   title: string;
   leftIcon?: string;
   rightIcon?: string;
-  isSubmitting: boolean;
+  isSubmitting?: boolean;
   bgColor?: string;
   textColor?: string;
 }

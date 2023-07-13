@@ -4,9 +4,9 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-import { createNewProject, fetchToken } from '@/lib/actions';
+import { ProjectInterface, SessionInterface } from '@/common';
+import { createNewProject, fetchToken, updateProject } from '@/lib/actions';
 
-import { SessionInterface } from '../../common';
 import Button from './Button';
 import CustomMenu from './CustomMenu';
 import FormField from './FormField';
@@ -16,19 +16,20 @@ import { categoryFilters } from '@/constants';
 interface ProjectFormProps {
   type: string;
   session: SessionInterface;
+  project?: ProjectInterface;
 }
 
 const ProjectForm = (props: ProjectFormProps) => {
-  const { type, session } = props;
+  const { type, session, project } = props;
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [form, setForm] = useState({
-    title: '',
-    description: '',
-    image: '',
-    liveSiteUrl: '',
-    githubUrl: '',
-    category: '',
+    title: project?.title || '',
+    description: project?.description || '',
+    image: project?.image || '',
+    liveSiteUrl: project?.liveSiteUrl || '',
+    githubUrl: project?.githubUrl || '',
+    category: project?.category || '',
   });
 
   const router = useRouter();
@@ -72,6 +73,10 @@ const ProjectForm = (props: ProjectFormProps) => {
         await createNewProject(form, session?.user?.id, token);
 
         router.push('/');
+      } else if (type === 'edit' && project) {
+        await updateProject(form, project.id, token);
+
+        router.push('/');
       }
     } catch (error) {
       console.log(error);
@@ -108,7 +113,7 @@ const ProjectForm = (props: ProjectFormProps) => {
       <FormField
         title="Title"
         state={form.title}
-        placeholder="Flexxible"
+        placeholder="Flexibble"
         setState={(value) => handleStateChange('title', value)}
       />
       <FormField
@@ -147,7 +152,11 @@ const ProjectForm = (props: ProjectFormProps) => {
           }
           type="submit"
           bgColor="bg-green-500"
-          leftIcon={isSubmitting ? '' : '/plus.svg'}
+          leftIcon={
+            isSubmitting
+              ? ''
+              : `${type === 'create' ? '/plus.svg' : '/pencile.svg'}`
+          }
           isSubmitting={isSubmitting}
         />
       </div>
