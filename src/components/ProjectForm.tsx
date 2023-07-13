@@ -69,14 +69,13 @@ const ProjectForm = (props: ProjectFormProps) => {
 
     try {
       if (type === 'create') {
-        const result = await createNewProject(form, session?.user?.id, token);
+        await createNewProject(form, session?.user?.id, token);
 
-        // if(result.status !== 500) {
         router.push('/');
-        // }
       }
     } catch (error) {
       console.log(error);
+      alert('Something went wrong, please try again');
     } finally {
       setIsSubmitting(false);
     }

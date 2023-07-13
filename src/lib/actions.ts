@@ -19,7 +19,7 @@ const makeGraphQLRequest = async (query: string, variables = {}) => {
     return data;
   } catch (error: any) {
     console.log(error);
-    return error;
+    throw error;
   }
 };
 
