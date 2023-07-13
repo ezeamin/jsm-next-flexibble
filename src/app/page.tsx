@@ -2,6 +2,7 @@ import { ProjectInterface } from '@/common';
 import { fetchAllProjects } from '@/lib/actions';
 
 import Categories from '@/components/Categories';
+import Pagination from '@/components/Pagination';
 import ProjectCard from '@/components/ProjectCard';
 
 interface ProjectsSearch {
@@ -20,6 +21,7 @@ interface ProjectsSearch {
 
 interface SearchParams {
   category?: string;
+  endcursor?: string;
 }
 
 interface HomeProps {
@@ -28,12 +30,13 @@ interface HomeProps {
 
 const Home = async (props: HomeProps) => {
   const {
-    searchParams: { category },
+    searchParams: { category, endcursor },
   } = props;
 
-  const data = (await fetchAllProjects(category)) as ProjectsSearch;
+  const data = (await fetchAllProjects(category, endcursor)) as ProjectsSearch;
 
   const projectsToDisplay = data?.projectSearch?.edges || [];
+  const pagination = data?.projectSearch?.pageInfo || {};
 
   if (!projectsToDisplay.length) {
     return (
@@ -63,9 +66,18 @@ const Home = async (props: HomeProps) => {
           />
         ))}
       </section>
-      <h1>Pagination</h1>
+      <Pagination
+        startCursor={pagination.startCursor}
+        endCursor={pagination.endCursor}
+        hasPreviousPage={pagination.hasPreviousPage}
+        hasNextPage={pagination.hasNextPage}
+      />
     </section>
   );
 };
 
 export default Home;
+
+export const dynamic = 'force-dynamic';
+export const dynamicParams = true;
+export const revalidate = 0;
